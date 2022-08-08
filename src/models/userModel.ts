@@ -1,3 +1,4 @@
+import { USER_DATA_TO_SEND } from "../constants/tableConstants";
 import db from "../db/db";
 import User, { UserToInsert } from "../domain/User";
 
@@ -5,7 +6,7 @@ class UserAccount {
     public static table = "user_account";
 
     public static async getAllUsers() {
-        const users = await db(UserAccount.table).select();
+        const users = await db(UserAccount.table).select(USER_DATA_TO_SEND);
 
         return users;
     }
@@ -19,7 +20,7 @@ class UserAccount {
     public static async getUser(userId: number): Promise<User> {
         const user = await db(UserAccount.table)
             .where({ id: userId })
-            .select()
+            .select(USER_DATA_TO_SEND)
             .first();
 
         return user;
@@ -38,7 +39,7 @@ class UserAccount {
         const [updatedUser] = await db(UserAccount.table)
             .where({ id: user.id })
             .update(user)
-            .returning(["id"]);
+            .returning(USER_DATA_TO_SEND);
 
         return updatedUser;
     }

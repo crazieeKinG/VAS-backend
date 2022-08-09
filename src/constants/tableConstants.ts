@@ -18,3 +18,10 @@ export const VACCINE_DATA_TO_SEND = [
     "age",
     "ethnicity",
 ];
+export const APPOINTMENT_DATA_TO_SEND = [
+    "id",
+    "patientId",
+    "siteLocation",
+    "serviceType",
+    "appointmentStatus",
+];

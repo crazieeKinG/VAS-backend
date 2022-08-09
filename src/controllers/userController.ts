@@ -37,9 +37,6 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
     const data = req.body;
 
-    console.log(data);
-    
-
     userService
         .createUser(data)
         .then((data) => res.json(data))

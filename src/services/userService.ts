@@ -1,6 +1,6 @@
 import logger from "../misc/logger";
 import Success from "../domain/Success";
-import userModel from "../models/userModels";
+import userModel from "../models/userModel";
 import User, { UserToInsert } from "../domain/User";
 import bcrypt from "bcrypt";
 

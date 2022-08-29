@@ -3,7 +3,10 @@ import knexConfig from "./knexfile";
 
 // @ts-ignore
 import knexStringCase from "knex-stringcase";
+import dotenv from "dotenv";
 
-const knex = Knex(knexStringCase(knexConfig.development));
+dotenv.config();
+const environment = process.env.NODE_ENV as string;
+const knex = Knex(knexStringCase(knexConfig[environment]));
 
 export default knex;

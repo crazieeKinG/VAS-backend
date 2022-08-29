@@ -4,10 +4,16 @@ export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable("appointment_information", (table) => {
         table.increments("id");
         table.integer("patient_id");
-        table.string("site_location");
-        table.string("service_type");
-        table.string("appointment_status");
-        table.foreign("patient_id").references("id").inTable("user_account").onDelete("RESTRICT").onUpdate("CASCADE");
+        table.string("site_location").notNullable();
+        table.string("service_type").notNullable();
+        table.string("appointment)date").notNullable();
+        table.string("appointment_status").notNullable();
+        table
+            .foreign("patient_id")
+            .references("id")
+            .inTable("user_account")
+            .onDelete("RESTRICT")
+            .onUpdate("CASCADE");
     });
 }
 

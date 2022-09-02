@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import jwt from "jsonwebtoken";
+import { AuthorizedRequest, TokenPayload } from "../domain/AuthorizedRequest";
 import CustomError from "../misc/CustomError";
 
 const authenticate = async (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -13,12 +14,12 @@ const authenticate = async (
         req.headers.authorization?.split(" ")[1] || req.headers.auth;
 
     try {
-        const result = await jwt.verify(
+        const result = (await jwt.verify(
             accessToken as string,
             process.env.JWT_SECRET as string
-        );
+        )) as TokenPayload;
 
-        console.log(result);
+        req.currentUser = result.userId;
 
         next();
     } catch (err) {

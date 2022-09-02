@@ -7,12 +7,18 @@ export const USER_DATA_TO_SEND = [
     "ethnicity",
     "email",
     "documentUrl",
-    "isAdmin"
+    "state",
+    "city",
+    "street",
+    "insuranceId",
+    "memberId",
+    "insuranceProvider",
+    "isAdmin",
 ];
 export const VACCINE_DATA_TO_SEND = [
     "id",
     "serviceName",
-    "siteLocation",
+    "serviceLocation",
     "startDate",
     "endDate",
     "numberOfDoses",
@@ -25,5 +31,6 @@ export const APPOINTMENT_DATA_TO_SEND = [
     "patientId",
     "siteLocation",
     "serviceType",
+    "appointmentDate",
     "appointmentStatus",
 ];

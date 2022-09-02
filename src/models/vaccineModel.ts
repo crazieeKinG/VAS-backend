@@ -1,59 +1,70 @@
 import { VACCINE_DATA_TO_SEND } from "../constants/tableConstants";
 import db from "../db/db";
 import Vaccine, { VaccineToInsert } from "../domain/Vaccine";
+import { databaseError } from "../utils/errors";
 
 class VaccineInformation {
     public static table = "vaccine_information";
 
     public static async getAllVaccines() {
-        const vaccines = await db(VaccineInformation.table).select(
-            VACCINE_DATA_TO_SEND
-        );
+        try {
+            const vaccines = await db(VaccineInformation.table).select(
+                VACCINE_DATA_TO_SEND
+            );
 
-        return vaccines;
+            return vaccines;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async createVaccine(vaccine: VaccineToInsert) {
-        const { startDate, endDate } = vaccine;
+        try {
+            const newvaccine = await db(VaccineInformation.table).insert(
+                vaccine,
+                ["id"]
+            );
 
-        const newvaccine = await db(VaccineInformation.table).insert(
-            {
-                ...vaccine,
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
-            },
-            ["id"]
-        );
-
-        return newvaccine;
+            return newvaccine;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async getVaccine(vaccineId: number): Promise<Vaccine> {
-        const vaccine = await db(VaccineInformation.table)
-            .where({ id: vaccineId })
-            .select(VACCINE_DATA_TO_SEND)
-            .first();
+        try {
+            const vaccine = await db(VaccineInformation.table)
+                .where({ id: vaccineId })
+                .select(VACCINE_DATA_TO_SEND)
+                .first();
 
-        return vaccine;
+            return vaccine;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async updateVaccine(vaccine: Vaccine): Promise<Vaccine> {
-        const { startDate, endDate } = vaccine;
+        try {
+            const [updatedvaccine] = await db(VaccineInformation.table)
+                .where({ id: vaccine.id })
+                .update(vaccine)
+                .returning(VACCINE_DATA_TO_SEND);
 
-        const [updatedvaccine] = await db(VaccineInformation.table)
-            .where({ id: vaccine.id })
-            .update({
-                ...vaccine,
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
-            })
-            .returning(VACCINE_DATA_TO_SEND);
-
-        return updatedvaccine;
+            return updatedvaccine;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async deleteVaccine(vaccineId: number): Promise<void> {
-        await db(VaccineInformation.table).where({ id: vaccineId }).delete();
+        try {
+            await db(VaccineInformation.table)
+                .where({ id: vaccineId })
+                .delete();
+        } catch (error) {
+            throw databaseError;
+        }
     }
 }
 

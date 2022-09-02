@@ -7,9 +7,13 @@ class UserAccount {
     public static table = "user_account";
 
     public static async getAllUsers() {
-        const users = await db(UserAccount.table).select(USER_DATA_TO_SEND);
+        try {
+            const users = await db(UserAccount.table).select(USER_DATA_TO_SEND);
 
-        return users;
+            return users;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async createUser(user: UserToInsert) {
@@ -23,34 +27,50 @@ class UserAccount {
     }
 
     public static async getUser(userId: number): Promise<User> {
-        const user = await db(UserAccount.table)
-            .where({ id: userId })
-            .select(USER_DATA_TO_SEND)
-            .first();
+        try {
+            const user = await db(UserAccount.table)
+                .where({ id: userId })
+                .select(USER_DATA_TO_SEND)
+                .first();
 
-        return user;
+            return user;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async getUserByEmail(email: string): Promise<User> {
-        const user = await db(UserAccount.table)
-            .where({ email: email })
-            .select()
-            .first();
+        try {
+            const user = await db(UserAccount.table)
+                .where({ email: email })
+                .select()
+                .first();
 
-        return user;
+            return user;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async updateUser(user: User): Promise<User> {
-        const [updatedUser] = await db(UserAccount.table)
-            .where({ id: user.id })
-            .update(user)
-            .returning(USER_DATA_TO_SEND);
+        try {
+            const [updatedUser] = await db(UserAccount.table)
+                .where({ id: user.id })
+                .update(user)
+                .returning(USER_DATA_TO_SEND);
 
-        return updatedUser;
+            return updatedUser;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async deleteUser(userId: number): Promise<void> {
-        await db(UserAccount.table).where({ id: userId }).delete();
+        try {
+            await db(UserAccount.table).where({ id: userId }).delete();
+        } catch (error) {
+            throw databaseError;
+        }
     }
 }
 

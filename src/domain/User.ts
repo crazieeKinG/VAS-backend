@@ -7,6 +7,8 @@ interface User {
     gender: string;
     email: string;
     password: string;
+    isAdmin: boolean;
+    documentUrl: string;
 }
 
 export type UserToInsert = Omit<User, "id">;

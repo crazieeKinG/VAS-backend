@@ -80,15 +80,21 @@ export const createUser = async (
 };
 
 export const updateUser = async (user: User): Promise<Success<User>> => {
-    const { password } = user;
+    let updatedUserData: User = user;
 
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+    if (user.password) {
+        const { password } = user;
 
-    const updatedUser = await userModel.updateUser({
-        ...user,
-        password: passwordHash,
-    });
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        updatedUserData = {
+            ...user,
+            password: passwordHash,
+        };
+    }
+
+    const updatedUser = await userModel.updateUser(updatedUserData);
     logger.info("User updated successfully");
 
     return {

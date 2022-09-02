@@ -1,6 +1,7 @@
 import { USER_DATA_TO_SEND } from "../constants/tableConstants";
 import db from "../db/db";
 import User, { UserToInsert } from "../domain/User";
+import { databaseError } from "../utils/errors";
 
 class UserAccount {
     public static table = "user_account";
@@ -12,9 +13,13 @@ class UserAccount {
     }
 
     public static async createUser(user: UserToInsert) {
-        const newUser = await db(UserAccount.table).insert(user, ["id"]);
+        try {
+            const newUser = await db(UserAccount.table).insert(user, ["id"]);
 
-        return newUser;
+            return newUser;
+        } catch (error) {
+            throw databaseError;
+        }
     }
 
     public static async getUser(userId: number): Promise<User> {

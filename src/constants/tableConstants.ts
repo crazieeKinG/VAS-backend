@@ -6,6 +6,8 @@ export const USER_DATA_TO_SEND = [
     "dob",
     "ethnicity",
     "email",
+    "documentUrl",
+    "isAdmin"
 ];
 export const VACCINE_DATA_TO_SEND = [
     "id",

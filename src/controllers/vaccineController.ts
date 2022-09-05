@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { AuthorizedRequest } from "../domain/AuthorizedRequest";
 import CustomError from "../misc/CustomError";
 import logger from "../misc/logger";
 import * as vaccineService from "../services/vaccineService";
 
 export const getAllVaccines = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -15,7 +16,11 @@ export const getAllVaccines = (
         .catch((err) => next(err));
 };
 
-export const getVaccine = (req: Request, res: Response, next: NextFunction) => {
+export const getVaccine = (
+    req: AuthorizedRequest,
+    res: Response,
+    next: NextFunction
+) => {
     const { vaccineId } = req.params;
 
     vaccineService
@@ -25,7 +30,7 @@ export const getVaccine = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const createVaccine = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -38,7 +43,7 @@ export const createVaccine = (
 };
 
 export const updateVaccine = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -60,7 +65,7 @@ export const updateVaccine = (
 };
 
 export const deleteVaccine = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {

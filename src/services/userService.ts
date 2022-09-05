@@ -7,6 +7,8 @@ import bcrypt from "bcrypt";
 import Token from "../domain/Token";
 
 import jwt from "jsonwebtoken";
+import CustomError from "../misc/CustomError";
+import { StatusCodes } from "http-status-codes";
 
 export const login = async (
     email: string,
@@ -14,15 +16,17 @@ export const login = async (
 ): Promise<Success<Token>> => {
     const user = await userModel.getUserByEmail(email);
     if (!user) {
-        return {
-            message: "Invalid email or password",
-        };
+        throw new CustomError(
+            "Invalid email or password",
+            StatusCodes.UNAUTHORIZED
+        );
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        return {
-            message: "Password does not match",
-        };
+        throw new CustomError(
+            "Password does not match",
+            StatusCodes.UNAUTHORIZED
+        );
     }
 
     const accessToken = jwt.sign(
@@ -31,7 +35,11 @@ export const login = async (
     );
 
     return {
-        data: { accessToken },
+        data: {
+            username: user.firstName,
+            accessToken: accessToken,
+            isAdmin: user.isAdmin,
+        },
         message: "User logged in successfully",
     };
 };
@@ -80,8 +88,9 @@ export const createUser = async (
 };
 
 export const updateUser = async (user: User): Promise<Success<User>> => {
+    logger.info("Update controller");
     let updatedUserData: User = user;
-
+    
     if (user.password) {
         const { password } = user;
 

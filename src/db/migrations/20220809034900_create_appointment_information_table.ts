@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("patient_id");
         table.string("site_location").notNullable();
         table.string("service_type").notNullable();
-        table.string("appointment)date").notNullable();
+        table.string("appointment_date").notNullable();
         table.string("appointment_status").notNullable();
         table
             .foreign("patient_id")

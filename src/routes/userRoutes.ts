@@ -6,6 +6,7 @@ import authenticate from "../middlewares/authenticate";
 
 const router = Router();
 
+router.post("/", upload.single("photo"), userController.createUser);
 router.get("/", authenticate, userController.getAllUsers);
 router.get("/:userId", authenticate, userController.getUser);
 router.put(
@@ -15,7 +16,5 @@ router.put(
     userController.updateUser
 );
 router.delete("/:userId", authenticate, userController.deleteUser);
-
-router.post("/", upload.single("photo"), userController.createUser);
 
 export default router;

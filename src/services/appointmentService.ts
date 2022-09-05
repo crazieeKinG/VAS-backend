@@ -14,6 +14,21 @@ export const getAllAppointments = async (): Promise<Success<Appointment[]>> => {
     };
 };
 
+export const getAllAppointmentsByUser = async (
+    userId: number
+): Promise<Success<Appointment[]>> => {
+    logger.info("Getting all appointments");
+
+    const appointments = await appointmentModel.getAllAppointmentsByUser(
+        userId
+    );
+
+    return {
+        data: appointments,
+        message: "Appointments fetched successfully",
+    };
+};
+
 export const getAppointment = async (
     appointmentId: number
 ): Promise<Success<Appointment>> => {
@@ -30,7 +45,9 @@ export const getAppointment = async (
 export const createAppointment = async (
     appointment: AppointmentToInsert
 ): Promise<Success<Appointment>> => {
-    const insertedAppointment = await appointmentModel.createAppointment(appointment);
+    const insertedAppointment = await appointmentModel.createAppointment(
+        appointment
+    );
 
     logger.info("Appointment created successfully");
 
@@ -43,7 +60,9 @@ export const createAppointment = async (
 export const updateAppointment = async (
     appointment: Appointment
 ): Promise<Success<Appointment>> => {
-    const updatedAppointment = await appointmentModel.updateAppointment(appointment);
+    const updatedAppointment = await appointmentModel.updateAppointment(
+        appointment
+    );
     logger.info("Appointment updated successfully");
 
     return {

@@ -66,16 +66,20 @@ export const updateUser = async (
     res: Response,
     next: NextFunction
 ) => {
+    logger.info("Update controller");
     const { userId } = req.params;
     let data: User = req.body;
 
     if (!!req.file) {
         const previousUser = await userModel.getUser(+userId);
-        logger.info("Deleting previous image");
-        const response = await deleteImage(previousUser.documentUrl);
+        let response: string = "ok";
+        if (previousUser.documentUrl !== "") {
+            logger.info("Deleting previous image");
+            response = await deleteImage(previousUser.documentUrl);
+        }
 
         const fileString = (<Express.Multer.File>req.file).path;
-        if (response.toString() === "ok") {
+        if (response === "ok") {
             logger.info("Uploading document image");
             const cloudinaryUrl = await uploadImage(fileString);
             data = { ...data, documentUrl: cloudinaryUrl };
@@ -107,10 +111,13 @@ export const deleteUser = async (
     const { userId } = req.params;
 
     const previousUser = await userModel.getUser(+userId);
-    logger.info("Deleting previous image");
-    const response = await deleteImage(previousUser.documentUrl);
 
-    if (response.toString() === "ok") {
+    let response: string = "ok";
+    if (previousUser.documentUrl !== "") {
+        logger.info("Deleting previous image");
+        response = await deleteImage(previousUser.documentUrl);
+    }
+    if (response === "ok") {
         userService
             .deleteUser(+userId)
             .then((data) => res.json(data))

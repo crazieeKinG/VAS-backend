@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { AuthorizedRequest } from "../domain/AuthorizedRequest";
 import CustomError from "../misc/CustomError";
 import logger from "../misc/logger";
 import * as appointmentService from "../services/appointmentService";
 
 export const getAllAppointments = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -15,7 +16,24 @@ export const getAllAppointments = (
         .catch((err) => next(err));
 };
 
-export const getAppointment = (req: Request, res: Response, next: NextFunction) => {
+export const getAllAppointmentsByUser = (
+    req: AuthorizedRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    const userId = req.currentUser as number;
+
+    appointmentService
+        .getAllAppointmentsByUser(+userId)
+        .then((data) => res.json(data))
+        .catch((err) => next(err));
+};
+
+export const getAppointment = (
+    req: AuthorizedRequest,
+    res: Response,
+    next: NextFunction
+) => {
     const { appointmentId } = req.params;
 
     appointmentService
@@ -25,7 +43,7 @@ export const getAppointment = (req: Request, res: Response, next: NextFunction) 
 };
 
 export const createAppointment = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -38,7 +56,7 @@ export const createAppointment = (
 };
 
 export const updateAppointment = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {
@@ -60,7 +78,7 @@ export const updateAppointment = (
 };
 
 export const deleteAppointment = (
-    req: Request,
+    req: AuthorizedRequest,
     res: Response,
     next: NextFunction
 ) => {

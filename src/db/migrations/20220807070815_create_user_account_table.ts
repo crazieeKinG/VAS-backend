@@ -10,8 +10,14 @@ export async function up(knex: Knex): Promise<void> {
         table.string("gender").notNullable();
         table.string("email").unique().notNullable();
         table.string("password").notNullable();
+        table.string("state").notNullable();
+        table.string("city").notNullable();
+        table.string("street").notNullable();
+        table.string("insurance_id").notNullable();
+        table.string("insurance_provider").notNullable();
+        table.string("member_id").notNullable();
         table.string("document_url").notNullable();
-        table.boolean("is_admin").notNullable();
+        table.boolean("is_admin").notNullable().defaultTo(false);
     });
 }
 
